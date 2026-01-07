@@ -20,8 +20,8 @@ const server = http.createServer(app);
 app.use(
   cors({
     origin: [
-      "https://assignment-frontend-v2.vercel.app/", // Replace with your actual Vercel URL
-      "https://assignment-intervue.onrender.com/",
+      "https://assignment-frontend-v2.vercel.app", // Removed trailing slash
+      "https://assignment-intervue.onrender.com", // Removed trailing slash
       "http://localhost:3000",
       "http://localhost:5173",
     ],
@@ -39,8 +39,8 @@ app.use(express.json());
 const io = new Server(server, {
   cors: {
     origin: [
-      "https://assignment-frontend-v2.vercel.app/", // Replace with your actual Vercel URL
-      "https://assignment-intervue.onrender.com/",
+      "https://assignment-frontend-v2.vercel.app", // Removed trailing slash
+      "https://assignment-intervue.onrender.com", // Removed trailing slash
       "http://localhost:3000",
       "http://localhost:5173",
     ],
@@ -48,8 +48,15 @@ const io = new Server(server, {
     credentials: true,
   },
   transports: ["polling", "websocket"], // polling FIRST for Render
-  pingTimeout: 60000,
+  pingTimeout: 120000, // Increased timeout for Render
   pingInterval: 25000,
+  // Additional Render-specific settings
+  allowEIO3: true,
+  cookie: false,
+  serveClient: false,
+  // Handle connection issues better
+  connectTimeout: 45000,
+  upgradeTimeout: 10000
 });
 
 /* =========================
@@ -80,6 +87,16 @@ io.on("connection", (socket) => {
 // Health check
 app.get("/", (req, res) => {
   res.send("🎉 Polling server is running!");
+});
+
+// Socket.io health check
+app.get("/socket-health", (req, res) => {
+  res.json({
+    status: "ok",
+    socketConnections: io.engine.clientsCount,
+    transports: ["polling", "websocket"],
+    timestamp: new Date().toISOString()
+  });
 });
 
 // Poll history API
