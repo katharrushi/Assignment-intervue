@@ -4,11 +4,6 @@ A live interactive polling system for the classroom, where teachers can create p
 
 ## 🚀 Features
 
-
-
-
-
-
 ### For Teachers
 - **Real-time Poll Creation**: Create polls with multiple choice questions and set custom durations
 - **Live Results**: View student responses in real-time with visual progress bars
@@ -106,7 +101,7 @@ Assignment-Intervue/
 
 3. **Create environment file:**
    ```bash
-   # Create .env file in lpsbackend/
+   # Create .env file in backend/
    MONGODB_URI=mongodb://127.0.0.1:27017/live_polling
    PORT=5000
    ```
@@ -130,7 +125,7 @@ Assignment-Intervue/
 
 3. **Create environment file:**
    ```bash
-   # Create .env file in lpsfrontend/
+   # Create .env file in frontend/
    VITE_BACKEND_URI=http://localhost:5000
    ```
 
@@ -179,7 +174,7 @@ Assignment-Intervue/
 
 **Backend (.env):**
 ```env
-MONGODB_URI=mongodb://localhost:27017/live_polling_system
+MONGODB_URI=mongodb://localhost:27017/live_polling
 PORT=5000
 NODE_ENV=development
 ```
