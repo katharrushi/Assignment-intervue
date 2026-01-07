@@ -1,13 +1,8 @@
-﻿# Live Polling System (Intervue.io)
+﻿# Assignment-Intervue
 
 A live interactive polling system for the classroom, where teachers can create polls in real-time and students can answer live. Constructed using React 19, Node.js, and Socket.IO, it supports live results, live chat, student management, and a poll history—all perfect for increasing participation and online learning.
 
 ## 🚀 Features
-
-
-
-
-
 
 ### For Teachers
 - **Real-time Poll Creation**: Create polls with multiple choice questions and set custom durations
@@ -33,14 +28,14 @@ A live interactive polling system for the classroom, where teachers can create p
 
 ## 🏗️ Architecture
 
-### Backend (`lpsbackend/`)
+### Backend (`backend/`)
 - **Node.js** with **Express.js** framework
 - **Socket.IO** for real-time bidirectional communication
 - **MongoDB** with **Mongoose** ODM for data persistence
 - **CORS** enabled for cross-origin requests
 - **Environment-based configuration** with dotenv
 
-### Frontend (`lpsfrontend/`)
+### Frontend (`frontend/`)
 - **React 19** with modern hooks and functional components
 - **React Router** for client-side navigation
 - **TailwindCSS** for responsive and modern styling
@@ -51,8 +46,8 @@ A live interactive polling system for the classroom, where teachers can create p
 ## 📁 Project Structure
 
 ```
-Live-Polling-System/
-├── lpsbackend/                 # Backend server
+Assignment-Intervue/
+├── backend/                 # Backend server
 │   ├── index.js               # Main server entry point
 │   ├── models/
 │   │   └── Poll.js           # MongoDB Poll schema
@@ -63,7 +58,7 @@ Live-Polling-System/
 │   ├── utils/
 │   │   └── database.js       # MongoDB connection utility
 │   └── package.json
-├── lpsfrontend/               # Frontend React application
+├── frontend/               # Frontend React application
 │   ├── src/
 │   │   ├── components/       # Reusable UI components
 │   │   │   ├── ActivePoll.jsx
@@ -96,7 +91,7 @@ Live-Polling-System/
 
 1. **Navigate to backend directory:**
    ```bash
-   cd lpsbackend
+   cd backend
    ```
 
 2. **Install dependencies:**
@@ -106,8 +101,8 @@ Live-Polling-System/
 
 3. **Create environment file:**
    ```bash
-   # Create .env file in lpsbackend/
-   MONGODB_URI=mongodb://localhost:27017/live_polling_system
+   # Create .env file in backend/
+   MONGODB_URI=mongodb://127.0.0.1:27017/live_polling
    PORT=5000
    ```
 
@@ -120,7 +115,7 @@ Live-Polling-System/
 
 1. **Navigate to frontend directory:**
    ```bash
-   cd lpsfrontend
+   cd frontend
    ```
 
 2. **Install dependencies:**
@@ -130,7 +125,7 @@ Live-Polling-System/
 
 3. **Create environment file:**
    ```bash
-   # Create .env file in lpsfrontend/
+   # Create .env file in frontend/
    VITE_BACKEND_URI=http://localhost:5000
    ```
 
@@ -179,7 +174,7 @@ Live-Polling-System/
 
 **Backend (.env):**
 ```env
-MONGODB_URI=mongodb://localhost:27017/live_polling_system
+MONGODB_URI=mongodb://localhost:27017/live_polling
 PORT=5000
 NODE_ENV=development
 ```
@@ -243,22 +238,5 @@ The Poll model includes:
 2. Deploy the `dist` folder to your hosting service
 3. Configure environment variables for production
 
-## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 🆘 Support
-
-For issues and questions:
-1. Check the existing issues
-2. Create a new issue with detailed description
-3. Include error logs and steps to reproduce
-
----
-
-**Built with ❤️ for modern education**
 
