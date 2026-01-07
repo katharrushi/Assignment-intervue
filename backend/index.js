@@ -20,7 +20,7 @@ const server = http.createServer(app);
 app.use(
   cors({
     origin: [
-    //   "https://live-polling-system-5f56.onrender.com",
+      "https://assignment-frontend-v2.vercel.app/", // Replace with your actual Vercel URL
       "https://assignment-intervue.onrender.com/",
       "http://localhost:3000",
       "http://localhost:5173",
@@ -39,8 +39,8 @@ app.use(express.json());
 const io = new Server(server, {
   cors: {
     origin: [
-    //   "https://live-polling-system-5f56.onrender.com",
-    "https://assignment-intervue.onrender.com/",
+      "https://assignment-frontend-v2.vercel.app/", // Replace with your actual Vercel URL
+      "https://assignment-intervue.onrender.com/",
       "http://localhost:3000",
       "http://localhost:5173",
     ],
