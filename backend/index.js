@@ -19,16 +19,42 @@ const server = http.createServer(app);
 ========================= */
 app.use(
   cors({
-    origin: [
-      "https://assignment-frontend-v2.vercel.app", // Removed trailing slash
-      "https://assignment-intervue.onrender.com", // Removed trailing slash
-      "http://localhost:3000",
-      "http://localhost:5173",
-    ],
-    methods: ["GET", "POST"],
+    origin: function (origin, callback) {
+      const allowedOrigins = [
+        "https://assignment-frontend-v2.vercel.app",
+        "https://assignment-intervue.onrender.com",
+        "http://localhost:3000",
+        "http://localhost:5173",
+      ];
+      
+      console.log('CORS check - Origin:', origin);
+      
+      // Allow requests with no origin (mobile apps, etc.) or from allowed origins
+      if (!origin || allowedOrigins.includes(origin)) {
+        console.log('CORS allowed for origin:', origin);
+        callback(null, true);
+      } else {
+        console.log('CORS blocked origin:', origin);
+        callback(new Error('Not allowed by CORS'), false);
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   })
 );
+
+// Handle preflight requests explicitly
+app.options('*', (req, res) => {
+  const origin = req.headers.origin;
+  console.log('OPTIONS request from origin:', origin);
+  
+  res.header('Access-Control-Allow-Origin', origin);
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.sendStatus(200);
+});
 
 app.use(express.json());
 
@@ -38,14 +64,25 @@ app.use(express.json());
 ========================= */
 const io = new Server(server, {
   cors: {
-    origin: [
-      "https://assignment-frontend-v2.vercel.app", // Removed trailing slash
-      "https://assignment-intervue.onrender.com", // Removed trailing slash
-      "http://localhost:3000",
-      "http://localhost:5173",
-    ],
-    methods: ["GET", "POST"],
+    origin: function (origin, callback) {
+      const allowedOrigins = [
+        "https://assignment-frontend-v2.vercel.app",
+        "https://assignment-intervue.onrender.com",
+        "http://localhost:3000",
+        "http://localhost:5173",
+      ];
+      
+      // Allow requests with no origin (mobile apps, etc.) or from allowed origins
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.log('CORS blocked origin:', origin);
+        callback(new Error('Not allowed by CORS'), false);
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   },
   transports: ["polling", "websocket"], // polling FIRST for Render
   pingTimeout: 120000, // Increased timeout for Render
@@ -56,7 +93,7 @@ const io = new Server(server, {
   serveClient: false,
   // Handle connection issues better
   connectTimeout: 45000,
-  upgradeTimeout: 10000
+  upgradeTimeout: 10000,
 });
 
 /* =========================
@@ -64,19 +101,19 @@ const io = new Server(server, {
 ========================= */
 mongoose
   .connect(process.env.MONGODB_URI)
-  .then(() => console.log("✅ MongoDB connected successfully"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
+  .then(() => console.log("MongoDB connected successfully"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 /* =========================
    SOCKET EVENTS
 ========================= */
 io.on("connection", (socket) => {
-  console.log("🟢 Client connected:", socket.id);
+  console.log("Client connected:", socket.id);
 
   socketHandler(socket, io);
 
   socket.on("disconnect", (reason) => {
-    console.log("🔴 Client disconnected:", socket.id, "| Reason:", reason);
+    console.log("Client disconnected:", socket.id, "| Reason:", reason);
   });
 });
 
@@ -86,7 +123,16 @@ io.on("connection", (socket) => {
 
 // Health check
 app.get("/", (req, res) => {
-  res.send("🎉 Polling server is running!");
+  res.send("Polling server is running!");
+});
+
+// CORS test endpoint
+app.get("/api/cors-test", (req, res) => {
+  res.json({
+    message: "CORS is working!",
+    origin: req.headers.origin,
+    timestamp: new Date().toISOString()
+  });
 });
 
 // Socket.io health check
@@ -145,7 +191,7 @@ app.get("/api/polls/history", async (req, res) => {
 
     res.json(history);
   } catch (error) {
-    console.error("❌ Error fetching poll history:", error);
+    console.error("Error fetching poll history:", error);
     res.status(500).json({ error: "Failed to fetch poll history" });
   }
 });
@@ -156,5 +202,5 @@ app.get("/api/polls/history", async (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 server.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
