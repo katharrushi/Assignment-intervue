@@ -107,7 +107,7 @@ Assignment-Intervue/
 3. **Create environment file:**
    ```bash
    # Create .env file in lpsbackend/
-   MONGODB_URI=mongodb://localhost:27017/live_polling_system
+   MONGODB_URI=mongodb://127.0.0.1:27017/live_polling
    PORT=5000
    ```
 
